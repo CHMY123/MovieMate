@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <title>MovieMate 电影网站</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/css/style.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.7.1/dist/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+</head>
+<body>
+    <!-- 导航栏 -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="/">🎬 MovieMate</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                    <li class="nav-item"><a class="nav-link active" href="/">首页</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#">电影库</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#">排行榜</a></li>
+                </ul>
+                <a class="btn btn-outline-light me-2" href="/user/login">登录</a>
+                <a class="btn btn-light" href="/user/register">注册</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- 主要内容区域 -->
+    <main class="container my-4">
+        <!-- 轮播图 -->
+        <div id="mainCarousel" class="carousel slide mb-4" data-bs-ride="carousel">
+            <div class="carousel-indicators">
+                <button type="button" data-bs-target="#mainCarousel" data-bs-slide-to="0" class="active"></button>
+                <button type="button" data-bs-target="#mainCarousel" data-bs-slide-to="1"></button>
+                <button type="button" data-bs-target="#mainCarousel" data-bs-slide-to="2"></button>
+            </div>
+            <div class="carousel-inner rounded">
+                <div class="carousel-item active">
+                    <img src="/images/banner1.jpg" class="d-block w-100" alt="热门电影">
+                    <div class="carousel-caption">
+                        <h3>热门电影推荐</h3>
+                        <p>最新上映，精彩不断</p>
+                    </div>
+                </div>
+                <div class="carousel-item">
+                    <img src="/images/banner2.jpg" class="d-block w-100" alt="VIP专享">
+                    <div class="carousel-caption">
+                        <h3>VIP专享内容</h3>
+                        <p>尊享高清画质，无广告打扰</p>
+                    </div>
+                </div>
+                <div class="carousel-item">
+                    <img src="/images/banner3.jpg" class="d-block w-100" alt="经典电影">
+                    <div class="carousel-caption">
+                        <h3>经典电影回顾</h3>
+                        <p>重温经典，感受永恒</p>
+                    </div>
+                </div>
+            </div>
+            <button class="carousel-control-prev" type="button" data-bs-target="#mainCarousel" data-bs-slide="prev">
+                <span class="carousel-control-prev-icon"></span>
+            </button>
+            <button class="carousel-control-next" type="button" data-bs-target="#mainCarousel" data-bs-slide="next">
+                <span class="carousel-control-next-icon"></span>
+            </button>
+        </div>
+
+        <!-- 热门电影 -->
+        <section class="mb-5">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <h2 class="h4 mb-0">热门电影</h2>
+                <button class="btn btn-outline-primary btn-sm" onclick="loadType('全部')">查看更多</button>
+            </div>
+            <div class="row row-cols-1 row-cols-md-2 row-cols-lg-4 g-4" id="hotMovies">
+                <!-- 电影卡片将通过JavaScript动态加载 -->
+            </div>
+        </section>
+
+        <!-- 电影分类 -->
+        <section class="mb-5">
+            <h2 class="h4 mb-3">电影分类</h2>
+            <div class="row g-3">
+                <div class="col-6 col-md-4 col-lg-2">
+                    <button class="btn btn-danger me-2" onclick="loadType('动作')">动作</button>
+                </div>
+                <div class="col-6 col-md-4 col-lg-2">
+                    <button class="btn btn-warning me-2" onclick="loadType('喜剧')">喜剧</button>
+                </div>
+                <div class="col-6 col-md-4 col-lg-2">
+                    <button class="btn btn-pink me-2" style="background:#ff69b4;color:#fff;" onclick="loadType('爱情')">爱情</button>
+                </div>
+                <div class="col-6 col-md-4 col-lg-2">
+                    <button class="btn btn-info me-2" onclick="loadType('科幻')">科幻</button>
+                </div>
+                <div class="col-6 col-md-4 col-lg-2">
+                    <button class="btn btn-dark me-2" onclick="loadType('恐怖')">恐怖</button>
+                </div>
+                <div class="col-6 col-md-4 col-lg-2">
+                    <button class="btn btn-success me-2" onclick="loadType('动画')">动画</button>
+                </div>
+            </div>
+        </section>
+
+        <!-- VIP会员推广 -->
+        <section class="mb-5">
+            <div class="card bg-gradient">
+                <div class="card-body text-center py-5">
+                    <h2 class="card-title mb-3">开通VIP会员</h2>
+                    <p class="card-text mb-4">尊享高清画质，无广告打扰，海量VIP专享内容</p>
+                    <a href="/user/vip" class="btn btn-warning btn-lg">立即开通</a>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- 页脚 -->
+    <footer th:replace="layout/base :: footer"></footer>
+
+    <!-- 脚本 -->
+    <script th:src="@{/js/main.js}"></script>
+    <script>
+        // 加载热门电影
+        function loadHotMovies() {
+            $.ajax({
+                url: '/api/movie/hot?limit=4',
+                method: 'GET',
+                success: function(response) {
+                    if (response.code === 200) {
+                        const movies = response.data;
+                        const container = $('#hotMovies');
+                        container.empty();
+                        
+                        movies.forEach(movie => {
+                            const card = `
+                                <div class="col">
+                                    <div class="card h-100">
+                                        <img src="${movie.coverImg}" class="card-img-top" alt="${movie.movieName}">
+                                        <div class="card-body">
+                                            <h5 class="card-title">${movie.movieName}</h5>
+                                            <p class="card-text">
+                                                <small class="text-muted">${movie.movieType} | ${movie.region}</small>
+                                            </p>
+                                            <div class="d-flex justify-content-between align-items-center">
+                                                <div class="rating">
+                                                    <i class="fas fa-star text-warning"></i>
+                                                    <span>${movie.score}</span>
+                                                </div>
+                                                ${movie.isVip ? '<span class="badge bg-warning">VIP</span>' : ''}
+                                            </div>
+                                        </div>
+                                        <div class="card-footer bg-transparent">
+                                            <a href="/movie/detail?id=${movie.id}" class="btn btn-primary btn-sm w-100">查看详情</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            `;
+                            container.append(card);
+                        });
+                    }
+                },
+                error: function() {
+                    $('#hotMovies').html('<div class="text-center text-muted">加载失败，请稍后重试</div>');
+                }
+            });
+        }
+
+        // 页面加载完成后执行
+        $(document).ready(function() {
+            loadHotMovies();
+        });
+
+        // 动态渲染热门电影轮播图
+        $(function(){
+            $.ajax({
+                url: '/api/movie/hot?limit=5',
+                method: 'GET',
+                success: function(response) {
+                    if (response.code === 200) {
+                        let html = '';
+                        response.data.forEach((movie, idx) => {
+                            html += `<div class="carousel-item${idx===0?' active':''}">
+                                <img src="${movie.coverImg||'/images/banner.jpg'}" class="d-block w-100" alt="${movie.movieName}">
+                                <div class="carousel-caption d-none d-md-block">
+                                    <h5>${movie.movieName}</h5>
+                                    <p>${movie.description||''}</p>
+                                </div>
+                            </div>`;
+                        });
+                        if(html) $('#carousel-inner').html(html);
+                    }
+                },
+                error: function() {
+                    console.error('轮播图加载失败');
+                }
+            });
+            // 默认加载动作片
+            loadType('动作');
+        });
+
+        // 分类点击加载电影
+        function loadType(type){
+            let url = type==='全部' ? '/api/movie/hot?limit=12' : '/api/movie/type/'+type+'?page=1&size=12';
+            $.ajax({
+                url: url,
+                method: 'GET',
+                success: function(response) {
+                    if (response.code === 200) {
+                        let html = '';
+                        response.data.forEach(movie => {
+                            html += `<div class="col-md-3 mb-4">
+                                <div class="card h-100">
+                                    <img src="${movie.coverImg||'/images/banner.jpg'}" class="card-img-top" style="height:220px;object-fit:cover;">
+                                    <div class="card-body">
+                                        <h5 class="card-title">${movie.movieName}</h5>
+                                        <p class="card-text text-truncate">${movie.description||''}</p>
+                                        <a href="/movie/detail?id=${movie.id}" class="btn btn-primary btn-sm">详情</a>
+                                    </div>
+                                </div>
+                            </div>`;
+                        });
+                        $('#type-movie-list').html(html||'<div class="text-center text-muted">暂无数据</div>');
+                    }
+                },
+                error: function() {
+                    $('#type-movie-list').html('<div class="text-center text-muted">加载失败，请稍后重试</div>');
+                }
+            });
+        }
+    </script>
+</body>
+</html> 

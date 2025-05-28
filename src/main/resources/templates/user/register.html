@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="layout/base :: head">
+</head>
+<body>
+    <!-- 导航栏 -->
+    <nav th:replace="layout/base :: nav"></nav>
+
+    <!-- 主要内容区域 -->
+    <main class="container my-4">
+        <div class="row justify-content-center">
+            <div class="col-md-6 col-lg-4">
+                <div class="card shadow-sm">
+                    <div class="card-body p-4">
+                        <h2 class="text-center mb-4">用户注册</h2>
+                        <form id="registerForm" onsubmit="return handleRegister(event)">
+                            <div class="mb-3">
+                                <label for="username" class="form-label">用户名</label>
+                                <input type="text" class="form-control" id="username" name="username" 
+                                       pattern="[a-zA-Z0-9]{6,20}" required
+                                       title="用户名长度6-20位，只能包含字母和数字">
+                                <div class="form-text">用户名长度6-20位，只能包含字母和数字</div>
+                            </div>
+                            <div class="mb-3">
+                                <label for="password" class="form-label">密码</label>
+                                <input type="password" class="form-control" id="password" name="password" 
+                                       pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,20}$" required
+                                       title="密码长度8-20位，必须包含大小写字母和数字">
+                                <div class="form-text">密码长度8-20位，必须包含大小写字母和数字</div>
+                            </div>
+                            <div class="mb-3">
+                                <label for="confirmPassword" class="form-label">确认密码</label>
+                                <input type="password" class="form-control" id="confirmPassword" name="confirmPassword" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="email" class="form-label">邮箱</label>
+                                <input type="email" class="form-control" id="email" name="email" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="phone" class="form-label">手机号</label>
+                                <input type="tel" class="form-control" id="phone" name="phone" 
+                                       pattern="^1[3-9]\d{9}$"
+                                       title="请输入正确的手机号">
+                            </div>
+                            <div class="mb-3 form-check">
+                                <input type="checkbox" class="form-check-input" id="agreeTerms" name="agreeTerms" required>
+                                <label class="form-check-label" for="agreeTerms">
+                                    我已阅读并同意<a href="/terms" target="_blank">服务条款</a>
+                                </label>
+                            </div>
+                            <div class="d-grid">
+                                <button type="submit" class="btn btn-primary">注册</button>
+                            </div>
+                        </form>
+                        <div class="text-center mt-3">
+                            <p class="mb-0">已有账号？ <a href="/user/login">立即登录</a></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- 页脚 -->
+    <footer th:replace="layout/base :: footer"></footer>
+
+    <!-- 脚本 -->
+    <script th:src="@{/js/main.js}"></script>
+    <script>
+        function handleRegister(event) {
+            event.preventDefault();
+            
+            // 验证密码是否一致
+            const password = $('#password').val();
+            const confirmPassword = $('#confirmPassword').val();
+            if (password !== confirmPassword) {
+                showToast('两次输入的密码不一致', 'error');
+                return false;
+            }
+
+            // 验证表单
+            const form = $('#registerForm')[0];
+            if (!form.checkValidity()) {
+                form.reportValidity();
+                return false;
+            }
+
+            // 收集表单数据
+            const formData = {
+                username: $('#username').val(),
+                password: password,
+                email: $('#email').val(),
+                phone: $('#phone').val()
+            };
+
+            // 发送注册请求
+            $.ajax({
+                url: '/api/user/register',
+                method: 'POST',
+                contentType: 'application/json',
+                data: JSON.stringify(formData),
+                success: function(response) {
+                    if (response.code === 200) {
+                        // 保存token
+                        localStorage.setItem('token', response.data.token);
+                        
+                        // 显示成功消息
+                        showToast('注册成功', 'success');
+                        
+                        // 跳转到首页
+                        setTimeout(() => {
+                            window.location.href = '/';
+                        }, 1000);
+                    } else {
+                        showToast(response.message, 'error');
+                    }
+                },
+                error: function() {
+                    showToast('注册失败，请稍后重试', 'error');
+                }
+            });
+
+            return false;
+        }
+
+        // 显示提示消息
+        function showToast(message, type) {
+            const toast = `
+                <div class="toast align-items-center text-white bg-${type === 'success' ? 'success' : 'danger'} border-0" role="alert">
+                    <div class="d-flex">
+                        <div class="toast-body">
+                            ${message}
+                        </div>
+                        <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast"></button>
+                    </div>
+                </div>
+            `;
+            
+            const toastContainer = $('<div class="toast-container position-fixed bottom-0 end-0 p-3"></div>');
+            toastContainer.append(toast);
+            $('body').append(toastContainer);
+            
+            const toastElement = toastContainer.find('.toast');
+            const bsToast = new bootstrap.Toast(toastElement);
+            bsToast.show();
+            
+            // 自动移除toast
+            toastElement.on('hidden.bs.toast', function() {
+                toastContainer.remove();
+            });
+        }
+
+        // 实时验证密码一致性
+        $('#confirmPassword').on('input', function() {
+            const password = $('#password').val();
+            const confirmPassword = $(this).val();
+            
+            if (password !== confirmPassword) {
+                $(this).setCustomValidity('两次输入的密码不一致');
+            } else {
+                $(this).setCustomValidity('');
+            }
+        });
+    </script>
+</body>
+</html> 

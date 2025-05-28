@@ -25,12 +25,11 @@ MovieMate
 │   │   └── PaymentController（支付模块）
 ├── service层（服务层）
 │   ├── service
-│   │   ├── impl
-│   │   │   ├── UserServiceImpl（会员服务）
-│   │   │   ├── MovieServiceImpl（影片服务）
-│   │   │   ├── RankServiceImpl（排行服务）
-│   │   │   ├── ActorServiceImpl（主创服务）
-│   │   │   └── PaymentServiceImpl（支付服务）
+│   │   ├── UserService（会员服务）
+│   │   ├── MovieService（影片服务）
+│   │   ├── RankService（排行服务）
+│   │   ├── ActorService（主创服务）
+│   │   └── PaymentService（支付服务）
 ├── mapper层（数据访问层）
 │   ├── mapper
 │   │   ├── UserMapper
@@ -467,5 +466,4 @@ MovieMate
   SELECT * FROM tb_movie 
   WHERE id IN (SELECT id FROM tb_movie ORDER BY view_count DESC LIMIT 100000, 10);
   ```
-
 

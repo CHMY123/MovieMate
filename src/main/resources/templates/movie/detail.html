@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="layout/base :: head">
+</head>
+<body>
+    <!-- 导航栏 -->
+    <nav th:replace="layout/base :: nav"></nav>
+
+    <!-- 主要内容区域 -->
+    <main class="container my-4">
+        <!-- 电影详情 -->
+        <div class="row mb-5">
+            <!-- 左侧封面 -->
+            <div class="col-md-4">
+                <img th:src="${movie.coverImg}" class="img-fluid rounded shadow" alt="电影封面">
+            </div>
+            <!-- 右侧信息 -->
+            <div class="col-md-8">
+                <h1 class="mb-3" th:text="${movie.movieName}">电影名称</h1>
+                <div class="mb-3">
+                    <span class="badge bg-primary me-2" th:text="${movie.movieType}">类型</span>
+                    <span class="badge bg-secondary me-2" th:text="${movie.region}">地区</span>
+                    <span class="badge bg-warning" th:if="${movie.isVip}">VIP专享</span>
+                </div>
+                <div class="mb-3">
+                    <div class="d-flex align-items-center">
+                        <div class="rating me-3">
+                            <i class="fas fa-star text-warning"></i>
+                            <span th:text="${movie.score}">评分</span>
+                        </div>
+                        <div class="views">
+                            <i class="fas fa-eye text-secondary"></i>
+                            <span th:text="${movie.viewCount}">播放量</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="mb-3">
+                    <h5>导演</h5>
+                    <a th:href="@{'/director/' + ${movie.director.id}}" class="text-decoration-none">
+                        <span th:text="${movie.director.directorName}">导演名</span>
+                    </a>
+                </div>
+                <div class="mb-3">
+                    <h5>主演</h5>
+                    <div class="d-flex flex-wrap gap-2">
+                        <a th:each="actor : ${movie.actors}" 
+                           th:href="@{'/actor/' + ${actor.id}}"
+                           class="text-decoration-none">
+                            <span th:text="${actor.actorName}">演员名</span>
+                        </a>
+                    </div>
+                </div>
+                <div class="mb-3">
+                    <h5>上映时间</h5>
+                    <p th:text="${#dates.format(movie.releaseTime, 'yyyy-MM-dd')}">2024-01-01</p>
+                </div>
+                <div class="mb-4">
+                    <h5>剧情简介</h5>
+                    <p th:text="${movie.description}">电影简介</p>
+                </div>
+                <div class="d-grid gap-2 d-md-flex">
+                    <button class="btn btn-primary btn-lg" onclick="playMovie()">
+                        <i class="fas fa-play me-2"></i>立即观看
+                    </button>
+                    <button class="btn btn-warning btn-lg" th:if="${!movie.isVip}" onclick="upgradeVip()">
+                        <i class="fas fa-crown me-2"></i>开通VIP
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- 相关推荐 -->
+        <section class="mb-5">
+            <h2 class="h4 mb-3">相关推荐</h2>
+            <div class="row row-cols-1 row-cols-md-2 row-cols-lg-4 g-4" id="relatedMovies">
+                <!-- 相关电影将通过JavaScript动态加载 -->
+            </div>
+        </section>
+    </main>
+
+    <!-- 页脚 -->
+    <footer th:replace="layout/base :: footer"></footer>
+
+    <!-- 脚本 -->
+    <script th:src="@{/js/main.js}"></script>
+    <script th:inline="javascript">
+        // 获取电影ID
+        const movieId = /*[[${movie.id}]]*/ null;
+        const isVip = /*[[${movie.isVip}]]*/ false;
+        const userType = /*[[${session.userType}]]*/ 0;
+
+        // 播放电影
+        function playMovie() {
+            // 检查是否登录
+            const token = localStorage.getItem('token');
+            if (!token) {
+                showToast('请先登录', 'error');
+                setTimeout(() => {
+                    window.location.href = '/user/login';
+                }, 1000);
+                return;
+            }
+
+            // 检查VIP权限
+            if (isVip && userType !== 1) {
+                showToast('该影片为VIP专享，请开通VIP会员', 'error');
+                return;
+            }
+
+            // 跳转到播放页面
+            window.location.href = `/movie/play/${movieId}`;
+        }
+
+        // 开通VIP
+        function upgradeVip() {
+            window.location.href = '/user/vip';
+        }
+
+        // 加载相关推荐
+        function loadRelatedMovies() {
+            $.ajax({
+                url: `/api/movie/list?type=${/*[[${movie.movieType}]]*/ ''}&page=1&size=4`,
+                method: 'GET',
+                headers: {
+                    'Authorization': `Bearer ${localStorage.getItem('token')}`
+                },
+                success: function(response) {
+                    if (response.code === 200) {
+                        const movies = response.data.list.filter(movie => movie.id !== movieId);
+                        const container = $('#relatedMovies');
+                        container.empty();
+                        
+                        movies.forEach(movie => {
+                            const card = `
+                                <div class="col">
+                                    <div class="card h-100">
+                                        <img src="${movie.coverImg}" class="card-img-top" alt="${movie.movieName}">
+                                        <div class="card-body">
+                                            <h5 class="card-title">${movie.movieName}</h5>
+                                            <p class="card-text">
+                                                <small class="text-muted">${movie.movieType} | ${movie.region}</small>
+                                            </p>
+                                            <div class="d-flex justify-content-between align-items-center">
+                                                <div class="rating">
+                                                    <i class="fas fa-star text-warning"></i>
+                                                    <span>${movie.score}</span>
+                                                </div>
+                                                ${movie.isVip ? '<span class="badge bg-warning">VIP</span>' : ''}
+                                            </div>
+                                        </div>
+                                        <div class="card-footer bg-transparent">
+                                            <a href="/movie/detail/${movie.id}" class="btn btn-primary btn-sm w-100">查看详情</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            `;
+                            container.append(card);
+                        });
+                    }
+                }
+            });
+        }
+
+        // 显示提示消息
+        function showToast(message, type) {
+            const toast = `
+                <div class="toast align-items-center text-white bg-${type === 'success' ? 'success' : 'danger'} border-0" role="alert">
+                    <div class="d-flex">
+                        <div class="toast-body">
+                            ${message}
+                        </div>
+                        <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast"></button>
+                    </div>
+                </div>
+            `;
+            
+            const toastContainer = $('<div class="toast-container position-fixed bottom-0 end-0 p-3"></div>');
+            toastContainer.append(toast);
+            $('body').append(toastContainer);
+            
+            const toastElement = toastContainer.find('.toast');
+            const bsToast = new bootstrap.Toast(toastElement);
+            bsToast.show();
+            
+            // 自动移除toast
+            toastElement.on('hidden.bs.toast', function() {
+                toastContainer.remove();
+            });
+        }
+
+        // 页面加载完成后执行
+        $(document).ready(function() {
+            loadRelatedMovies();
+        });
+    </script>
+</body>
+</html> 

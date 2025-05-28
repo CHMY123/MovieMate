@@ -1,0 +1,51 @@
+server:
+  port: 8080
+
+spring:
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/moviemate?useUnicode=true&characterEncoding=utf-8&serverTimezone=Asia/Shanghai
+    username: root
+    password: 123456
+  
+  data:
+    redis:
+      host: localhost
+      port: 6379
+      database: 0
+      timeout: 10000
+      lettuce:
+        pool:
+          max-active: 8
+          max-wait: -1
+          max-idle: 8
+          min-idle: 0
+
+mybatis-plus:
+  mapper-locations: classpath:mapper/*.xml
+  type-aliases-package: cn.edu.scnu.moviemate.entity
+  configuration:
+    map-underscore-to-camel-case: true
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+  global-config:
+    db-config:
+      id-type: auto
+      logic-delete-field: deleted
+      logic-delete-value: 1
+      logic-not-delete-value: 0
+
+# 支付宝配置
+alipay:
+  app-id: your_app_id
+  private-key: your_private_key
+  public-key: your_public_key
+  notify-url: http://your_domain/notify
+  return-url: http://your_domain/return
+  gateway: https://openapi.alipaydev.com/gateway.do
+
+  spring:
+    jackson:
+      date-format: yyyy-MM-dd
+      time-zone: Asia/Shanghai
+      serialization:
+        write-dates-as-timestamps: false
