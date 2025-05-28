@@ -143,7 +143,7 @@ footer {
     .carousel-item {
         height: 300px;
     }
-    
+
     .card-img-top {
         height: 150px;
     }
@@ -210,4 +210,54 @@ footer {
     to {
         transform: rotate(360deg);
     }
-} 
+}
+
+/* 修复搜索栏图标显示问题 */
+.btn i {
+    vertical-align: middle;
+}
+
+.btn-outline-light i {
+    color: white;
+    font-size: 16px;
+}
+
+.btn-outline-light:hover i {
+    color: var(--primary-color);
+}
+
+/* 修复分类按钮显示问题 */
+button[onclick^="loadType"] {
+    display: block !important;
+    visibility: visible !important;
+}
+
+button[onclick^="loadType"] {
+    transition: all 0.2s;
+}
+
+button[onclick^="loadType"]:hover {
+    transform: translateY(-2px);
+}
+
+button[onclick="loadType('全部')"] {
+    background-color: var(--primary-color);
+    color: white;
+}
+
+button[onclick="loadType('全部')"]:hover {
+    background-color: #0b5ed7;
+}
+
+/* 移动端搜索框样式优化 */
+#mobileSearchBox {
+    transition: all 0.3s ease-in-out;
+}
+
+#mobileSearchInput {
+    border-radius: 4px 0 0 4px;
+}
+
+.input-group button {
+    border-radius: 0 4px 4px 0;
+}

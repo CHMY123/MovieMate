@@ -2,11 +2,15 @@ package cn.edu.scnu.moviemate.entity;
 
 import com.baomidou.mybatisplus.annotation.*;
 import lombok.Data;
-import java.time.LocalDateTime;
+
+import java.io.Serializable;
+import java.util.Date;
 
 @Data
 @TableName("tb_user")
-public class User {
+public class User implements Serializable {
+    private static final long serialVersionUID = 1L;
+    
     @TableId(type = IdType.AUTO)
     private Long id;
     private String username;
@@ -16,9 +20,9 @@ public class User {
     @TableField("user_type")
     private Integer userType; // 0=普通用户，1=VIP用户
     @TableField("vip_expire_time")
-    private LocalDateTime vipExpireTime; // VIP过期时间
+    private Date vipExpireTime;
     @TableField("create_time")
-    private LocalDateTime createTime;
+    private Date createTime;
     @TableField("last_login_time")
-    private LocalDateTime lastLoginTime;
+    private Date lastLoginTime;
 }

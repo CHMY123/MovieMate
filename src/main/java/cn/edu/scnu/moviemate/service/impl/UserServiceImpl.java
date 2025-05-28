@@ -9,7 +9,7 @@ import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDateTime;
+import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
@@ -19,13 +19,13 @@ public class UserServiceImpl implements UserService {
 
     @Autowired
     private UserMapper userMapper;
-    
+
     @Autowired
     private RedisTemplate<String, Object> redisTemplate;
-    
+
     @Autowired
     private PasswordEncoder passwordEncoder;
-    
+
     private static final String USER_KEY = "user:";
 
     @Override
@@ -36,14 +36,14 @@ public class UserServiceImpl implements UserService {
         if (userMapper.selectOne(queryWrapper) != null) {
             return false;
         }
-        
+
         // 加密密码
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         // 设置用户类型为普通用户
         user.setUserType(0);
-        // 设置创建时间
-        user.setCreateTime(LocalDateTime.now());
-        
+        // 设置创建时间（修改为 new Date()）
+        user.setCreateTime(new Date());
+
         return userMapper.insert(user) > 0;
     }
 
@@ -52,12 +52,12 @@ public class UserServiceImpl implements UserService {
         QueryWrapper<User> queryWrapper = new QueryWrapper<>();
         queryWrapper.eq("username", username);
         User user = userMapper.selectOne(queryWrapper);
-        
+
         if (user != null && passwordEncoder.matches(password, user.getPassword())) {
             // 生成token
             String token = UUID.randomUUID().toString();
-            // 更新最后登录时间
-            user.setLastLoginTime(LocalDateTime.now());
+            // 更新最后登录时间（修改为 new Date()）
+            user.setLastLoginTime(new Date());
             userMapper.updateById(user);
             // 将用户信息存入Redis
             redisTemplate.opsForValue().set("user:" + token, user, 7, TimeUnit.DAYS);
@@ -86,7 +86,7 @@ public class UserServiceImpl implements UserService {
     public User getUserById(Long id) {
         String key = USER_KEY + id;
         User user = (User) redisTemplate.opsForValue().get(key);
-        
+
         if (user == null) {
             user = userMapper.selectById(id);
             if (user != null) {
@@ -112,7 +112,8 @@ public class UserServiceImpl implements UserService {
     public void createUser(User user) {
         // 加密密码
         user.setPassword(passwordEncoder.encode(user.getPassword()));
-        user.setCreateTime(LocalDateTime.now());
+        // 设置创建时间（修改为 new Date()）
+        user.setCreateTime(new Date());
         userMapper.insert(user);
     }
 
@@ -141,9 +142,10 @@ public class UserServiceImpl implements UserService {
     public void updateLastLoginTime(Long id) {
         User user = new User();
         user.setId(id);
-        user.setLastLoginTime(LocalDateTime.now());
+        // 设置最后登录时间（修改为 new Date()）
+        user.setLastLoginTime(new Date());
         userMapper.updateById(user);
         // 清除缓存
         redisTemplate.delete(USER_KEY + id);
     }
-} 
+}

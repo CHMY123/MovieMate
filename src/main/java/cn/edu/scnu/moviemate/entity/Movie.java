@@ -2,12 +2,16 @@ package cn.edu.scnu.moviemate.entity;
 
 import com.baomidou.mybatisplus.annotation.*;
 import lombok.Data;
-import java.time.LocalDate;
+
+import java.io.Serializable;
+import java.util.Date;
 import java.util.List;
 
 @Data
 @TableName("tb_movie")
-public class Movie {
+public class Movie implements Serializable {
+    private static final long serialVersionUID = 1L;
+
     @TableId(type = IdType.AUTO)
     private Long id;
     @TableField("movie_name")
@@ -18,7 +22,7 @@ public class Movie {
     @TableField("director_id")
     private Long directorId;
     @TableField("release_time")
-    private LocalDate releaseTime;
+    private Date releaseTime; // 保持为 java.util.Date 类型
     private Double score;
     @TableField("view_count")
     private Long viewCount;

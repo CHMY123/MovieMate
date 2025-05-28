@@ -1,0 +1,1057 @@
+-- 关闭外键约束检查（允许按任意顺序删除表数据）
+SET FOREIGN_KEY_CHECKS = 0;
+
+-- 清空所有表数据
+TRUNCATE TABLE tb_movie_actor;
+TRUNCATE TABLE tb_movie_director;
+TRUNCATE TABLE tb_movie;
+TRUNCATE TABLE tb_actor;
+TRUNCATE TABLE tb_director;
+TRUNCATE TABLE tb_user;
+
+-- 重新启用外键约束检查
+SET FOREIGN_KEY_CHECKS = 1;
+
+-- 重置自增主键计数器
+ALTER TABLE tb_user AUTO_INCREMENT = 1;
+ALTER TABLE tb_director AUTO_INCREMENT = 1;
+ALTER TABLE tb_actor AUTO_INCREMENT = 1;
+ALTER TABLE tb_movie AUTO_INCREMENT = 1;
+
+-- 插入热门电影数据
+INSERT INTO tb_movie (movie_name, movie_type, region, director_id, release_time, score, view_count, is_vip, cover_img, description)
+VALUES
+('复仇者联盟4：终局之战', '动作/科幻', '美国', 1, '2019-04-24 00:00:00', 8.5, 2000000, 1, 'https://example.com/avengers4.jpg', '漫威电影宇宙的终极大战，超级英雄们集结对抗灭霸'),
+('唐人街探案3', '喜剧/悬疑', '中国', 2, '2021-02-12 00:00:00', 6.8, 1500000, 0, 'https://example.com/tant3.jpg', '唐仁和秦风在东京展开的一场惊险刺激的探案之旅'),
+('你好，李焕英', '喜剧/剧情', '中国', 3, '2021-02-12 00:00:00', 7.7, 1800000, 0, 'https://example.com/nihaolhy.jpg', '贾晓玲穿越回八十年代，与年轻的母亲李焕英发生的一系列温暖有趣的故事');
+
+-- 插入其他分类电影数据
+INSERT INTO tb_movie (movie_name, movie_type, region, director_id, release_time, score, view_count, is_vip, cover_img, description)
+VALUES
+('肖申克的救赎', '剧情/犯罪', '美国', 4, '1994-09-23 00:00:00', 9.7, 1000000, 0, 'https://example.com/shxsdkjs.jpg', '银行家安迪被误判入狱，在监狱中通过自我救赎重获自由的故事'),
+('泰坦尼克号', '爱情/灾难', '美国', 5, '1997-12-19 00:00:00', 9.4, 1200000, 0, 'https://example.com/titanic.jpg', '穷画家杰克和贵族女露丝在泰坦尼克号上展开的一段跨越阶层的爱情悲剧'),
+('疯狂动物城', '动画/冒险', '美国', 6, '2016-03-04 00:00:00', 9.2, 1300000, 0, 'https://example.com/fkdmz.jpg', '兔子朱迪和狐狸尼克在动物城合作破案，追寻梦想的故事'),
+('阿凡达', '科幻/冒险', '美国', 7, '2009-12-16 00:00:00', 8.8, 1600000, 1, 'https://example.com/afd.jpg', '人类士兵杰克在潘多拉星球的冒险，以及与纳美人的故事'),
+('哈利·波特与魔法石', '奇幻/冒险', '英国/美国', 8, '2001-11-16 00:00:00', 8.2, 1100000, 0, 'https://example.com/halibote.jpg', '哈利·波特进入霍格沃茨魔法学校，开启魔法冒险之旅的故事'),
+('寻梦环游记', '动画/奇幻', '美国', 9, '2017-11-22 00:00:00', 9.1, 1400000, 0, 'https://example.com/xmhyzj.jpg', '小男孩米格为追求音乐梦想，在亡灵世界的奇妙冒险'),
+('星际穿越', '科幻/冒险', '美国', 10, '2014-11-07 00:00:00', 9.3, 1500000, 1, 'https://example.com/xjcy.jpg', '宇航员库珀穿越虫洞，为人类寻找新家园的冒险故事'),
+('看不见的客人', '悬疑/犯罪', '西班牙', 11, '2017-01-06 00:00:00', 8.8, 1000000, 0, 'https://example.com/kbjdkr.jpg', '企业家艾德里安和女律师弗吉尼亚在案件推理过程中不断反转的故事'),
+('寄生虫', '剧情/犯罪', '韩国', 12, '2019-05-30 00:00:00', 8.6, 900000, 0, 'https://example.com/jishengchong.jpg', '基宇一家与朴社长一家之间发生的一系列故事，揭示社会阶层差异'),
+('毒液：致命守护者', '动作/科幻', '美国', 13, '2018-11-09 00:00:00', 7.2, 1200000, 1, 'https://example.com/duye.jpg', '记者埃迪·布洛克与外星共生体毒液结合，守护地球的故事'),
+('疯狂原始人', '动画/冒险', '美国', 14, '2013-02-15 00:00:00', 7.9, 1100000, 0, 'https://example.com/fkyrs.jpg', '咕噜一家在史前世界的冒险，以及与盖的相遇和新生活'),
+('误杀', '悬疑/犯罪', '中国', 15, '2019-12-13 00:00:00', 7.5, 1300000, 0, 'https://example.com/wusha.jpg', '李维杰利用电影知识为家人掩盖误杀罪行的故事'),
+('冰雪奇缘', '动画/冒险', '美国', 16, '2013-11-27 00:00:00', 8.4, 1400000, 0, 'https://example.com/bxqy.jpg', '安娜和艾莎在阿伦黛尔王国的冒险，以及关于爱与魔法的故事'),
+('蜘蛛侠：英雄远征', '动作/科幻', '美国', 17, '2019-06-28 00:00:00', 7.7, 1600000, 1, 'https://example.com/zsmyxyz.jpg', '彼得·帕克在欧洲度假期间，与神秘客的对抗以及成长故事'),
+('哪吒之魔童降世', '动画/奇幻', '中国', 18, '2019-07-26 00:00:00', 8.5, 1800000, 0, 'https://example.com/nzzmtjs.jpg', '哪吒作为魔丸转世，与命运抗争的故事'),
+('我不是药神', '剧情/现实', '中国', 19, '2018-07-05 00:00:00', 9.0, 1500000, 0, 'https://example.com/wbsys.jpg', '程勇为帮助慢粒白血病患者，从印度代购低价仿制药的故事'),
+('海王', '动作/科幻', '美国', 20, '2018-12-07 00:00:00', 7.6, 1400000, 1, 'https://example.com/hw.jpg', '亚瑟·库瑞成为海王，领导亚特兰蒂斯对抗外敌的故事'),
+('飞驰人生', '喜剧/剧情', '中国', 21, '2019-02-05 00:00:00', 6.9, 1300000, 0, 'https://example.com/fcs.jpg', '赛车手张驰为重返车坛，经历重重困难的故事'),
+('绿皮书', '剧情/喜剧', '美国', 22, '2018-09-11 00:00:00', 8.9, 1100000, 0, 'https://example.com/lps.jpg', '保镖托尼和黑人钢琴家唐·雪利在南方巡演期间发生的故事'),
+('少年的你', '剧情/犯罪', '中国', 23, '2019-10-25 00:00:00', 8.3, 1200000, 0, 'https://example.com/sndn.jpg', '陈念和小北在校园霸凌背景下相互守护的故事'),
+('流浪地球', '科幻/冒险', '中国', 24, '2019-02-05 00:00:00', 7.9, 1700000, 0, 'https://example.com/llq.jpg', '人类为了拯救地球，开启流浪地球计划的冒险故事'),
+('白蛇：缘起', '动画/奇幻', '中国', 25, '2019-01-11 00:00:00', 7.8, 1000000, 0, 'https://example.com/bsyq.jpg', '小白和许宣跨越前世今生的爱情故事'),
+('姜子牙', '动画/奇幻', '中国', 26, '2020-10-01 00:00:00', 6.6, 900000, 0, 'https://example.com/jzy.jpg', '姜子牙在封神之后，探寻真相的故事'),
+('误杀2', '剧情/犯罪', '中国', 27, '2021-12-17 00:00:00', 6.0, 800000, 0, 'https://example.com/wusha2.jpg', '林日朗为救儿子，与警方周旋的故事'),
+('速度与激情9', '动作/犯罪', '美国', 28, '2021-05-21 00:00:00', 6.3, 1100000, 1, 'https://example.com/sdyjq9.jpg', '多米尼克·托雷托和他的团队面临新的挑战和冒险'),
+('哥斯拉大战金刚', '动作/科幻', '美国', 29, '2021-03-26 00:00:00', 6.4, 1200000, 1, 'https://example.com/gsldzjg.jpg', '哥斯拉与金刚两大怪兽之间的世纪对决'),
+('人潮汹涌', '喜剧/犯罪', '中国', 30, '2021-02-12 00:00:00', 6.5, 1000000, 0, 'https://example.com/rchy.jpg', '冷血杀手周全和落魄龙套陈小萌因意外交换身份的故事'),
+('刺杀小说家', '奇幻/冒险', '中国', 31, '2021-02-12 00:00:00', 6.6, 900000, 0, 'https://example.com/csxjs.jpg', '关宁为了寻找女儿，接下刺杀小说家路空文的任务，却卷入奇幻世界的故事'),
+('新神榜：哪吒重生', '动画/奇幻', '中国', 32, '2021-02-12 00:00:00', 6.8, 800000, 0, 'https://example.com/xsbnzcs.jpg', '三太子李云祥与哪吒的灵魂产生关联，展开的一系列冒险'),
+('猫和老鼠：真人版', '动画/喜剧', '美国', 33, '2021-02-26 00:00:00', 6.2, 700000, 0, 'https://example.com/mhlszrb.jpg', '汤姆和杰瑞在人类世界继续他们的追逐打闹'),
+('拆弹专家2', '动作/犯罪', '中国', 34, '2020-12-24 00:00:00', 7.3, 1000000, 0, 'https://example.com/cdzj2.jpg', '潘乘风在经历人生低谷后，再次投身拆弹任务的故事'),
+('你好世界', '动画/科幻', '日本', 35, '2021-06-11 00:00:00', 7.2, 600000, 0, 'https://example.com/nihaoshijie.jpg', '直实与一行瑠璃在不同世界中的相遇与成长故事'),
+('悬崖之上', '剧情/悬疑', '中国', 36, '2021-04-30 00:00:00', 7.4, 900000, 0, 'https://example.com/xyzs.jpg', '特工们在敌占区执行秘密任务的故事'),
+('扫黑·决战', '剧情/犯罪', '中国', 37, '2021-05-01 00:00:00', 6.5, 800000, 0, 'https://example.com/shjuezhan.jpg', '扫黑专案组组长宋一锐与黑恶势力斗争的故事'),
+('秘密访客', '悬疑/惊悚', '中国', 38, '2021-05-01 00:00:00', 6.0, 700000, 0, 'https://example.com/mmfk.jpg', '汪先生一家和访客之间充满秘密的故事'),
+('阳光劫匪', '喜剧/冒险', '中国', 39, '2021-05-01 00:00:00', 5.5, 600000, 0, 'https://example.com/ygrj.jpg', '晓雪和三个朋友组成“阳光劫匪”，展开一场营救老虎娜娜的冒险'),
+('追虎擒龙', '动作/犯罪', '中国', 40, '2021-05-01 00:00:00', 5.8, 700000, 0, 'https://example.com/zhql.jpg', '廉政公署人员陈克和白松安与毒枭跛豪和总华探长徐乐的斗争故事'),
+('真·三国无双', '动作/奇幻', '中国', 41, '2021-04-30 00:00:00', 5.1, 500000, 0, 'https://example.com/zsgws.jpg', '游戏改编，呈现三国乱世英雄们的故事'),
+('世间有她', '剧情/现实', '中国', 42, '2021-09-19 00:00:00', 5.5, 400000, 0, 'https://example.com/sjyta.jpg', '展现疫情期间不同女性的生活故事'),
+('峰爆', '动作/灾难', '中国', 43, '2021-09-17 00:00:00', 6.6, 700000, 0, 'https://example.com/fengbao.jpg', '以小洪和老洪父子为代表的基建人在地质灾害面前抢险救灾的故事'),
+('关于我妈的一切', '剧情/亲情', '中国', 44, '2021-09-19 00:00:00', 6.1, 600000, 0, 'https://example.com/gymmdyeq.jpg', '讲述女儿李小美与母亲季佩珍之间的故事'),
+('长津湖', '战争/历史', '中国', 45, '2021-09-30 00:00:00', 7.4, 2500000, 0, 'https://example.com/cjh.jpg', '展现中国人民志愿军在长津湖战役中的英勇事迹'),
+('我和我的父辈', '剧情/现实', '中国', 46, '2021-09-30 00:00:00', 6.5, 1800000, 0, 'https://example.com/whwdfb.jpg', '通过四个故事，展现不同时代父辈们的奋斗与奉献'),
+('铁道英雄', '动作/战争', '中国', 47, '2021-11-19 00:00:00', 6.0, 800000, 0, 'https://example.com/tdyx.jpg', '以铁道游击队为原型，讲述他们在抗日战争时期的故事');
+
+-- 插入热门导演数据
+INSERT INTO tb_director (director_name, gender, birth_date, intro, image_url)
+VALUES
+('安东尼·罗素', 0, '1970-02-26 00:00:00', '美国导演，代表作《复仇者联盟4：终局之战》等', 'https://example.com/anthony_russo.jpg'),
+('陈思诚', 0, '1978-02-02 00:00:00', '中国导演，代表作《唐人街探案》系列等', 'https://example.com/chen_sicheng.jpg'),
+('贾玲', 1, '1982-04-29 00:00:00', '中国导演，代表作《你好，李焕英》', 'https://example.com/jia_ling.jpg');
+
+-- 插入其他导演数据
+INSERT INTO tb_director (director_name, gender, birth_date, intro, image_url)
+VALUES
+('弗兰克·德拉邦特', 0, '1959-01-28 00:00:00', '美国导演，代表作《肖申克的救赎》', 'https://example.com/frank_darabont.jpg'),
+('詹姆斯·卡梅隆', 0, '1954-08-16 00:00:00', '加拿大导演，代表作《泰坦尼克号》《阿凡达》等', 'https://example.com/james_cameron.jpg'),
+('拜伦·霍华德', 0, '1973-03-23 00:00:00', '美国导演，代表作《疯狂动物城》', 'https://example.com/byron_howard.jpg'),
+('克里斯托弗·诺兰', 0, '1970-07-30 00:00:00', '英国导演，代表作《星际穿越》《盗梦空间》等', 'https://example.com/christopher_nolan.jpg'),
+('大卫·叶茨', 0, '1963-10-17 00:00:00', '英国导演，代表作《哈利·波特与魔法石》后续多部哈利·波特系列电影', 'https://example.com/david_yates.jpg'),
+('李·昂克里奇', 0, '1968-08-08 00:00:00', '美国导演，代表作《寻梦环游记》', 'https://example.com/lee_ungerich.jpg'),
+('奉俊昊', 0, '1969-09-14 00:00:00', '韩国导演，代表作《寄生虫》', 'https://example.com/bong_joon_ho.jpg'),
+('鲁本·弗雷斯彻', 0, '1975-04-02 00:00:00', '美国导演，代表作《毒液：致命守护者》', 'https://example.com/ruben_fleischer.jpg'),
+('柯克·德·米科', 0, '1969-01-01 00:00:00', '美国导演，代表作《疯狂原始人》', 'https://example.com/kirk_de_mico.jpg'),
+('柯汶利', 0, '1984-03-02 00:00:00', '马来西亚导演，代表作《误杀》', 'https://example.com/ke_wenli.jpg'),
+('克里斯·巴克', 0, '1960-07-02 00:00:00', '美国导演，代表作《冰雪奇缘》', 'https://example.com/chris_buck.jpg'),
+('乔·沃茨', 0, '1981-06-23 00:00:00', '美国导演，代表作《蜘蛛侠：英雄远征》', 'https://example.com/joe_watts.jpg'),
+('饺子', 0, '1980-10-04 00:00:00', '中国导演，代表作《哪吒之魔童降世》', 'https://example.com/jiao_zi.jpg'),
+('文牧野', 0, '1985-10-1 00:00:00', '中国导演，代表作《我不是药神》', 'https://example.com/wen_muye.jpg'),
+('温子仁', 0, '1977-02-27 00:00:00', '马来西亚华裔导演，代表作《海王》', 'https://example.com/wan_zi_ren.jpg'),
+('韩寒', 0, '1982-09-23 00:00:00', '中国导演，代表作《飞驰人生》', 'https://example.com/han_han.jpg'),
+('彼得·法雷里', 0, '1956-12-17 00:00:00', '美国导演，代表作《绿皮书》', 'https://example.com/peter_farrelly.jpg'),
+('曾国祥', 0, '1979-01-26 00:00:00', '中国香港导演，代表作《少年的你》', 'https://example.com/zeng_guoxiang.jpg'),
+('郭帆', 0, '1980-12-05 00:00:00', '中国导演，代表作《流浪地球》', 'https://example.com/guo_fan.jpg'),
+('黄家康', 0, '1986-01-01 00:00:00', '中国导演，代表作《白蛇：缘起》', 'https://example.com/huang_jiakang.jpg'),
+('程腾', 0, '1985-01-01 00:00:00', '中国导演，代表作《姜子牙》', 'https://example.com/cheng_teng.jpg'),
+('戴墨', 0, '1982-01-01 00:00:00', '中国导演，代表作《误杀2》', 'https://example.com/dai_mo.jpg'),
+('林诣彬', 0, '1974-07-17 00:00:00', '美国华裔导演，代表作《速度与激情9》', 'https://example.com/lin_yibin.jpg'),
+('亚当·温加德', 0, '1982-01-26 00:00:00', '美国导演，代表作《哥斯拉大战金刚》', 'https://example.com/adam_wingard.jpg'),
+('饶晓志', 0, '1980-01-01 00:00:00', '中国导演，代表作《人潮汹涌》', 'https://example.com/rao_xiaozhi.jpg'),
+('路阳', 0, '1982-11-23 00:00:00', '中国导演，代表作《刺杀小说家》', 'https://example.com/lu_yang.jpg'),
+('赵霁', 0, '1983-08-27 00:00:00', '中国导演，代表作《新神榜：哪吒重生》', 'https://example.com/zhao_ji.jpg'),
+('蒂姆·斯托瑞', 0, '1970-04-19 00:00:00', '美国导演，代表作《猫和老鼠：真人版》', 'https://example.com/tim_storey.jpg'),
+('邱礼涛', 0, '1961-01-01 00:00:00', '中国香港导演，代表作《拆弹专家2》', 'https://example.com/qiu_litao.jpg'),
+('伊藤智彦', 0, '1974-05-27 00:00:00', '日本导演，代表作《你好世界》', 'https://example.com/ito_tomohiko.jpg'),
+('张艺谋', 0, '1950-11-14 00:00:00', '中国导演，代表作《悬崖之上》', 'https://example.com/zhang_yimou.jpg'),
+('吕聿来', 0, '1982-04-8 00:00:00', '中国导演，代表作《扫黑·决战》', 'https://example.com/lv_yulai.jpg'),
+('陈正道', 0, '1981-03-07 00:00:00', '中国台湾导演，代表作《秘密访客》', 'https://example.com/chen_zhengdao.jpg'),
+('李玉', 1, '1973-04-22 00:00:00', '中国导演，代表作《阳光劫匪》', 'https://example.com/li_yu.jpg'),
+('王晶', 0, '1955-05-03 00:00:00', '中国香港导演，代表作《追虎擒龙》', 'https://example.com/wang_jing.jpg'),
+('周显扬', 0, '1979-01-01 00:00:00', '中国香港导演，代表作《真·三国无双》', 'https://example.com/zhou_xianyang.jpg'),
+('张艾嘉', 1, '1953-07-21 00:00:00', '中国导演，代表作《世间有她》', 'https://example.com/zhang_aijia.jpg'),
+('李骏', 0, '1964-01-01 00:00:00', '中国导演，代表作《峰爆》', 'https://example.com/li_jun.jpg'),
+('赵天宇', 0, '1982-07-22 00:00:00', '中国导演，代表作《关于我妈的一切》', 'https://example.com/zhao_tianyu.jpg'),
+('陈凯歌', 0, '1952-08-12 00:00:00', '中国导演，代表作《长津湖》（联合导演）', 'https://example.com/chen_kaige.jpg'),
+('徐克', 0, '1950-02-15 00:00:00', '中国香港导演，代表作《长津湖》（联合导演）', 'https://example.com/xu_ke.jpg'),
+('林超贤', 0, '1965-09-24 00:00:00', '中国香港导演，代表作《长津湖》（联合导演）', 'https://example.com/lin_chaoxian.jpg'),
+('吴京', 0, '1974-04-03 00:00:00', '中国导演，代表作《长津湖》（联合导演）', 'https://example.com/wu_jing.jpg'),
+('吴京', 0, '1974-04-03 00:00:00', '中国导演，代表作《我和我的父辈》（其中一个单元导演）', 'https://example.com/wu_jing.jpg'),
+('章子怡', 1, '1979-02-09 00:00:00', '中国导演，代表作《我和我的父辈》（其中一个单元导演）', 'https://example.com/zhang_ziyi.jpg'),
+('徐峥', 0, '1972-04-18 00:00:00', '中国导演，代表作《我和我的父辈》（其中一个单元导演）', 'https://example.com/xu_zheng.jpg'),
+('沈腾', 0, '1979-10-10 00:00:00', '中国导演，代表作《我和我的父辈》（其中一个单元导演）', 'https://example.com/shen_teng.jpg'),
+('杨枫', 0, '1970-01-01 00:00:00', '中国导演，代表作《铁道英雄》', 'https://example.com/yang_feng.jpg'),
+('别克', 0, '1985-01-01 00:00:00', '中国导演，代表作《门锁》', 'https://example.com/bu_ke.jpg');
+
+-- 插入热门演员数据
+INSERT INTO tb_actor (actor_name, gender, birth_date, intro, image_url)
+VALUES
+('小罗伯特·唐尼', 0, '1965-04-04 00:00:00', '美国演员，代表作《复仇者联盟》系列等', 'https://example.com/robert_downey_jr.jpg'),
+('刘昊然', 0, '1997-10-10 00:00:00', '中国演员，代表作《唐人街探案》系列等', 'https://example.com/liu_haoran.jpg'),
+('张小斐', 1, '1986-01-10 00:00:00', '中国演员，代表作《你好，李焕英》', 'https://example.com/zhang_xiaofei.jpg');
+
+-- 插入其他演员数据
+INSERT INTO tb_actor (actor_name, gender, birth_date, intro, image_url)
+VALUES
+('蒂姆·罗宾斯', 0, '1958-10-16 00:00:00', '美国演员，代表作《肖申克的救赎》', 'https://example.com/tim_robbins.jpg'),
+('摩根·弗里曼', 0, '1937-06-01 00:00:00', '美国演员，代表作《肖申克的救赎》', 'https://example.com/morgan_freeman.jpg'),
+('莱昂纳多·迪卡普里奥', 0, '1974-11-11 00:00:00', '美国演员，代表作《泰坦尼克号》', 'https://example.com/leonardo_dicaprio.jpg'),
+('凯特·温丝莱特', 1, '1975-10-05 00:00:00', '英国演员，代表作《泰坦尼克号》', 'https://example.com/kate_winslet.jpg'),
+('金妮弗·古德温', 1, '1978-05-22 00:00:00', '美国演员，代表作《疯狂动物城》', 'https://example.com/ginnifer_goodwin.jpg'),
+('杰森·贝特曼', 0, '1969-01-14 00:00:00', '美国演员，代表作《疯狂动物城》', 'https://example.com/jason_bateman.jpg'),
+('马修·麦康纳', 0, '1969-11-04 00:00:00', '美国演员，代表作《星际穿越》', 'https://example.com/matthew_mcconaughey.jpg'),
+('安妮·海瑟薇', 1, '1982-11-12 00:00:00', '美国演员，代表作《星际穿越》', 'https://example.com/anne_hathaway.jpg'),
+('丹尼尔·雷德克里夫', 0, '1989-07-23 00:00:00', '英国演员，代表作《哈利·波特》系列', 'https://example.com/daniel_radcliffe.jpg'),
+('艾玛·沃特森', 1, '1990-04-15 00:00:00', '英国演员，代表作《哈利·波特》系列', 'https://example.com/emma_watson.jpg'),
+('盖尔·加西亚·贝纳尔', 0, '1978-02-03 00:00:00', '墨西哥演员，代表作《寻梦环游记》', 'https://example.com/gale_garcia_bernal.jpg'),
+('安东尼·冈萨雷斯', 0, '2004-02-25 00:00:00', '美国演员，代表作《寻梦环游记》', 'https://example.com/anthony_gonzalez.jpg'),
+('宋康昊', 0, '1967-01-17 00:00:00', '韩国演员，代表作《寄生虫》', 'https://example.com/song_kanghao.jpg'),
+('李善均', 0, '1975-03-02 00:00:00', '韩国演员，代表作《寄生虫》', 'https://example.com/li_shanjun.jpg'),
+('汤姆·哈迪', 0, '1977-09-15 00:00:00', '英国演员，代表作《毒液：致命守护者》', 'https://example.com/tom_hardy.jpg'),
+('米歇尔·威廉姆斯', 1, '1980-09-09 00:00:00', '美国演员，代表作《毒液：致命守护者》', 'https://example.com/michelle_williams.jpg'),
+('尼古拉斯·凯奇', 0, '1964-01-07 00:00:00', '美国演员，代表作《疯狂原始人》', 'https://example.com/nicholas_cage.jpg'),
+('艾玛·斯通', 1, '1988-11-06 00:00:00', '美国演员，代表作《疯狂原始人》', 'https://example.com/emma_stone.jpg'),
+('肖央', 0, '1980-04-07 00:00:00', '中国演员，代表作《误杀》', 'https://example.com/xiao_yang.jpg'),
+('谭卓', 1, '1983-09-25 00:00:00', '中国演员，代表作《误杀》', 'https://example.com/tan_zhuo.jpg'),
+('克里斯汀·贝尔', 1, '1980-07-18 00:00:00', '美国演员，代表作《冰雪奇缘》', 'https://example.com/kristen_bell.jpg'),
+('伊迪娜·门泽尔', 1, '1971-05-30 00:00:00', '美国演员，代表作《冰雪奇缘》', 'https://example.com/idina_menzel.jpg'),
+('汤姆·赫兰德', 0, '1996-06-01 00:00:00', '英国演员，代表作《蜘蛛侠：英雄远征》', 'https://example.com/tom_holland.jpg'),
+('赞达亚', 1, '1996-09-01 00:00:00', '美国演员，代表作《蜘蛛侠：英雄远征》', 'https://example.com/zendaya.jpg'),
+('吕艳婷', 1, '1980-01-01 00:00:00', '中国配音演员，代表作《哪吒之魔童降世》（配音）', 'https://example.com/lv_yanting.jpg'),
+('囧森瑟夫', 0, '1980-01-01 00:00:00', '中国配音演员，代表作《哪吒之魔童降世》（配音）', 'https://example.com/jiong_sen_serf.jpg'),
+('徐峥', 0, '1972-04-18 00:00:00', '中国演员，代表作《我不是药神》', 'https://example.com/xu_zheng.jpg'),
+('王传君', 0, '1985-10-18 00:00:00', '中国演员，代表作《我不是药神》', 'https://example.com/wang_chuanjun.jpg'),
+('杰森·莫玛', 0, '1979-08-01 00:00:00', '美国演员，代表作《海王》', 'https://example.com/jason_momoa.jpg'),
+('艾梅柏·希尔德', 1, '1986-04-22 00:00:00', '美国演员，代表作《海王》', 'https://example.com/amber_hurd.jpg'),
+('沈腾', 0, '1979-10-10 00:00:00', '中国演员，代表作《飞驰人生》', 'https://example.com/shen_teng.jpg'),
+('黄景瑜', 0, '1992-11-30 00:00:00', '中国演员，代表作《飞驰人生》', 'https://example.com/huang_jingyu.jpg'),
+('维果·莫腾森', 0, '1958-10-20 00:00:00', '美国演员，代表作《绿皮书》', 'https://example.com/viggo_mortensen.jpg'),
+('马赫沙拉·阿里', 0, '1974-02-16 00:00:00', '美国演员，代表作《绿皮书》', 'https://example.com/mahershala_ali.jpg'),
+('周冬雨', 1, '1992-01-31 00:00:00', '中国演员，代表作《少年的你》', 'https://example.com/zhou_dongyu.jpg'),
+('易烊千玺', 0, '2000-11-28 00:00:00', '中国演员，代表作《少年的你》', 'https://example.com/yi_yangqianxi.jpg'),
+('吴京', 0, '1974-04-03 00:00:00', '中国演员，代表作《流浪地球》', 'https://example.com/wu_jing.jpg'),
+('屈楚萧', 0, '1994-05-01 00:00:00', '中国演员，代表作《流浪地球》', 'https://example.com/qu_chuxiao.jpg'),
+('张喆', 1, '1980-01-01 00:00:00', '中国配音演员，代表作《白蛇：缘起》（配音）', 'https://example.com/zhang_zhe.jpg'),
+('杨天翔', 0, '1990-08-14 00:00:00', '中国配音演员，代表作《白蛇：缘起》（配音）', 'https://example.com/yang_tianxiang.jpg'),
+('郑希', 0, '1980-01-01 00:00:00', '中国配音演员，代表作《姜子牙》（配音）', 'https://example.com/zheng_xi.jpg'),
+('季冠霖', 1, '1980-01-01 00:00:00', '中国配音演员，代表作《姜子牙》（配音）', 'https://example.com/ji_guanlin.jpg'),
+('肖央', 0, '1980-04-07 00:00:00', '中国演员，代表作《误杀2》', 'https://example.com/xiao_yang_again.jpg'),
+('任达华', 0, '1955-03-19 00:00:00', '中国香港演员，代表作《误杀2》', 'https://example.com/ren_dahua.jpg'),
+('范·迪塞尔', 0, '1967-07-18 00:00:00', '美国演员，代表作《速度与激情9》', 'https://example.com/vin_diesel.jpg'),
+('约翰·塞纳', 0, '1977-04-23 00:00:00', '美国演员，代表作《速度与激情9》', 'https://example.com/john_cena.jpg'),
+('亚历山大·斯卡斯加德', 0, '1976-08-25 00:00:00', '瑞典演员，代表作《哥斯拉大战金刚》', 'https://example.com/alexander_skarsgard.jpg'),
+('米莉·博比·布朗', 1, '2004-02-19 00:00:00', '英国演员，代表作《哥斯拉大战金刚》', 'https://example.com/millie_bobby_brown.jpg'),
+('刘德华', 0, '1961-09-27 00:00:00', '中国香港演员，代表作《人潮汹涌》', 'https://example.com/liu_dehua.jpg'),
+('肖央', 0, '1980-04-07 00:00:00', '中国演员，代表作《人潮汹涌》', 'https://example.com/xiao_yang_third.jpg'),
+('雷佳音', 0, '1983-08-29 00:00:00', '中国演员，代表作《刺杀小说家》', 'https://example.com/lei_jiayin.jpg'),
+('杨幂', 1, '1986-09-12 00:00:00', '中国演员，代表作《刺杀小说家》', 'https://example.com/yang_mi.jpg'),
+('杨天翔', 0, '1990-08-14 00:00:00', '中国配音演员，代表作《新神榜：哪吒重生》（配音）', 'https://example.com/yang_tianxiang_again.jpg'),
+('张赫', 0, '1984-09-17 00:00:00', '中国配音演员，代表作《新神榜：哪吒重生》（配音）', 'https://example.com/zhang_he.jpg'),
+('科洛·莫瑞兹', 1, '1997-02-10 00:00:00', '美国演员，代表作《猫和老鼠：真人版》', 'https://example.com/chloe_moretz.jpg'),
+('迈克尔·佩纳', 0, '1976-01-13 00:00:00', '美国演员，代表作《猫和老鼠：真人版》', 'https://example.com/michael_pena.jpg'),
+('刘德华', 0, '1961-09-27 00:00:00', '中国香港演员，代表作《拆弹专家2》', 'https://example.com/liu_dehua_again.jpg'),
+('刘青云', 0, '1964-02-16 00:00:00', '中国香港演员，代表作《拆弹专家2》', 'https://example.com/liu_qingyun.jpg'),
+('北村匠海', 0, '1997-11-3 00:00:00', '日本演员，代表作《你好世界》', 'https://example.com/kitamura_takumi.jpg'),
+('松坂桃李', 0, '1988-10-17 00:00:00', '日本演员，代表作《你好世界》', 'https://example.com/matsuzaka_toori.jpg'),
+('张译', 0, '1978-02-17 00:00:00', '中国演员，代表作《悬崖之上》', 'https://example.com/zhang_y.jpg'),
+('于和伟', 0, '1971-05-04 00:00:00', '中国演员，代表作《悬崖之上》', 'https://example.com/yu_hewei.jpg'),
+('姜武', 0, '1969-11-04 00:00:00', '中国演员，代表作《扫黑·决战》', 'https://example.com/jiang_wu.jpg'),
+('张颂文', 0, '1976-05-10 00:00:00', '中国演员，代表作《扫黑·决战》', 'https://example.com/zhang_songwen.jpg'),
+('郭富城', 0, '1965-10-26 00:00:00', '中国香港演员，代表作《秘密访客》', 'https://example.com/guo_fucheng.jpg'),
+('段奕宏', 0, '1973-05-16 00:00:00', '中国演员，代表作《秘密访客》', 'https://example.com/duan_yihong.jpg'),
+('马丽', 1, '1982-06-28 00:00:00', '中国演员，代表作《阳光劫匪》', 'https://example.com/ma_li.jpg'),
+('宋佳', 1, '1980-11-13 00:00:00', '中国演员，代表作《阳光劫匪》', 'https://example.com/song_jia.jpg'),
+('古天乐', 0, '1970-10-21 00:00:00', '中国香港演员，代表作《追虎擒龙》', 'https://example.com/gu_tianle.jpg'),
+('梁家辉', 0, '1958-02-01 00:00:00', '中国香港演员，代表作《追虎擒龙》', 'https://example.com/liang_jiahui.jpg'),
+('王凯', 0, '1982-08-18 00:00:00', '中国演员，代表作《真·三国无双》', 'https://example.com/wang_kai.jpg'),
+('古力娜扎', 1, '1992-05-02 00:00:00', '中国演员，代表作《真·三国无双》', 'https://example.com/gulnazar.jpg'),
+('周迅', 1, '1974-10-18 00:00:00', '中国演员，代表作《世间有她》', 'https://example.com/zhou_xun.jpg'),
+('易烊千玺', 0, '2000-11-28 00:00:00', '中国演员，代表作《世间有她》', 'https://example.com/yi_yangqianxi_again.jpg'),
+('朱一龙', 0, '1988-04-16 00:00:00', '中国演员，代表作《峰爆》', 'https://example.com/zhu_yilong.jpg'),
+('黄志忠', 0, '1969-03-05 00:00:00', '中国演员，代表作《峰爆》', 'https://example.com/huang_zhizhong.jpg'),
+('徐帆', 1, '1967-08-16 00:00:00', '中国演员，代表作《关于我妈的一切》', 'https://example.com/xu_fan.jpg'),
+('张婧仪', 1, '1999-07-10 00:00:00', '中国演员，代表作《关于我妈的一切》', 'https://example.com/zhang_jingyi.jpg'),
+('吴京', 0, '1974-04-03 00:00:00', '中国演员，代表作《长津湖》', 'https://example.com/wu_jing_third.jpg'),
+('易烊千玺', 0, '2000-11-28 00:00:00', '中国演员，代表作《长津湖》', 'https://example.com/yi_yangqianxi_third.jpg'),
+('吴京', 0, '1974-04-03 00:00:00', '中国演员，代表作《我和我的父辈》', 'https://example.com/wu_jing_fourth.jpg'),
+('章子怡', 1, '1979-02-09 00:00:00', '中国演员，代表作《我和我的父辈》', 'https://example.com/zhang_ziyi_again.jpg'),
+('范伟', 0, '1962-09-02 00:00:00', '中国演员，代表作《铁道英雄》', 'https://example.com/fan_wei.jpg'),
+('张涵予', 0, '1964-12-19 00:00:00', '中国演员，代表作《铁道英雄》', 'https://example.com/zhang_hanyu.jpg'),
+('白百何', 1, '1984-03-01 00:00:00', '中国演员，代表作《门锁》', 'https://example.com/bai_baihe.jpg'),
+('白客', 0, '1988-07-09 00:00:00', '中国演员，代表作《门锁》', 'https://example.com/bai_ke.jpg');
+
+-- 插入电影 - 演员关联数据（部分示例）
+INSERT INTO tb_movie_actor (movie_id, actor_id)
+SELECT m.id, a.id
+FROM tb_movie m
+JOIN tb_actor a
+-- 复仇者联盟4：终局之战
+WHERE m.movie_name = '复仇者联盟4：终局之战' AND a.actor_name = '小罗伯特·唐尼'
+UNION ALL
+SELECT m.id, a.id
+FROM tb_movie m
+JOIN tb_actor a
+WHERE m.movie_name = '复仇者联盟4：终局之战' AND a.actor_name IN ('克里斯·埃文斯', '马克·鲁法洛')
+-- 唐人街探案3
+UNION ALL
+SELECT m.id, a.id
+FROM tb_movie m
+JOIN tb_actor a
+WHERE m.movie_name = '唐人街探案3' AND a.actor_name = '刘昊然'
+UNION ALL
+SELECT m.id, a.id
+FROM tb_movie m
+JOIN tb_actor a
+WHERE m.movie_name = '唐人街探案3' AND a.actor_name IN ('王宝强', '妻夫木聪')
+-- 你好，李焕英
+UNION ALL
+SELECT m.id, a.id
+FROM tb_movie m
+JOIN tb_actor a
+WHERE m.movie_name = '你好，李焕英' AND a.actor_name = '张小斐'
+UNION ALL
+SELECT m.id, a.id
+FROM tb_movie m
+JOIN tb_actor a
+WHERE m.movie_name = '你好，李焕英' AND a.actor_name IN ('贾玲', '沈腾')
+-- 肖申克的救赎
+UNION ALL
+SELECT m.id, a.id
+FROM tb_movie m
+JOIN tb_actor a
+WHERE m.movie_name = '肖申克的救赎' AND a.actor_name = '蒂姆·罗宾斯'
+UNION ALL
+SELECT m.id, a.id
+FROM tb_movie m
+JOIN tb_actor a
+WHERE m.movie_name = '肖申克的救赎' AND a.actor_name = '摩根·弗里曼'
+-- 泰坦尼克号
+UNION ALL
+SELECT m.id, a.id
+FROM tb_movie m
+JOIN tb_actor a
+WHERE m.movie_name = '泰坦尼克号' AND a.actor_name = '莱昂纳多·迪卡普里奥'
+UNION ALL
+SELECT m.id, a.id
+FROM tb_movie m
+JOIN tb_actor a
+WHERE m.movie_name = '泰坦尼克号' AND a.actor_name = '凯特·温丝莱特'
+-- 疯狂动物城
+UNION ALL
+SELECT m.id, a.id
+FROM tb_movie m
+JOIN tb_actor a
+WHERE m.movie_name = '疯狂动物城' AND a.actor_name = '金妮弗·古德温'
+UNION ALL
+SELECT m.id, a.id
+FROM tb_movie m
+JOIN tb_actor a
+WHERE m.movie_name = '疯狂动物城' AND a.actor_name = '杰森·贝特曼'
+-- 星际穿越
+UNION ALL
+SELECT m.id, a.id
+FROM tb_movie m
+JOIN tb_actor a
+WHERE m.movie_name = '星际穿越' AND a.actor_name = '马修·麦康纳'
+UNION ALL
+SELECT m.id, a.id
+FROM tb_movie m
+JOIN tb_actor a
+WHERE m.movie_name = '星际穿越' AND a.actor_name = '安妮·海瑟薇'
+-- 哈利·波特与魔法石
+UNION ALL
+SELECT m.id, a.id
+FROM tb_movie m
+JOIN tb_actor a
+WHERE m.movie_name = '哈利·波特与魔法石' AND a.actor_name = '丹尼尔·雷德克里夫'
+UNION ALL
+SELECT m.id, a.id
+FROM tb_movie m
+JOIN tb_actor a
+WHERE m.movie_name = '哈利·波特与魔法石' AND a.actor_name = '艾玛·沃特森'
+-- 寻梦环游记
+UNION ALL
+SELECT m.id, a.id
+FROM tb_movie m
+JOIN tb_actor a
+WHERE m.movie_name = '寻梦环游记' AND a.actor_name = '盖尔·加西亚·贝纳尔'
+UNION ALL
+SELECT m.id, a.id
+FROM tb_movie m
+JOIN tb_actor a
+WHERE m.movie_name = '寻梦环游记' AND a.actor_name = '安东尼·冈萨雷斯'
+-- 寄生虫
+UNION ALL
+SELECT m.id, a.id
+FROM tb_movie m
+JOIN tb_actor a
+WHERE m.movie_name = '寄生虫' AND a.actor_name = '宋康昊'
+UNION ALL
+SELECT m.id, a.id
+FROM tb_movie m
+JOIN tb_actor a
+WHERE m.movie_name = '寄生虫' AND a.actor_name = '李善均'
+-- 毒液：致命守护者
+UNION ALL
+SELECT m.id, a.id
+FROM tb_movie m
+JOIN tb_actor a
+WHERE m.movie_name = '毒液：致命守护者' AND a.actor_name = '汤姆·哈迪'
+UNION ALL
+SELECT m.id, a.id
+FROM tb_movie m
+JOIN tb_actor a
+WHERE m.movie_name = '毒液：致命守护者' AND a.actor_name = '米歇尔·威廉姆斯'
+-- 疯狂原始人
+UNION ALL
+SELECT m.id, a.id
+FROM tb_movie m
+JOIN tb_actor a
+WHERE m.movie_name = '疯狂原始人' AND a.actor_name = '尼古拉斯·凯奇'
+UNION ALL
+SELECT m.id, a.id
+FROM tb_movie m
+JOIN tb_actor a
+WHERE m.movie_name = '疯狂原始人' AND a.actor_name = '艾玛·斯通'
+-- 误杀
+UNION ALL
+SELECT m.id, a.id
+FROM tb_movie m
+JOIN tb_actor a
+WHERE m.movie_name = '误杀' AND a.actor_name = '肖央'
+UNION ALL
+SELECT m.id, a.id
+FROM tb_movie m
+JOIN tb_actor a
+WHERE m.movie_name = '误杀' AND a.actor_name = '谭卓'
+-- 冰雪奇缘
+UNION ALL
+SELECT m.id, a.id
+FROM tb_movie m
+JOIN tb_actor a
+WHERE m.movie_name = '冰雪奇缘' AND a.actor_name = '克里斯汀·贝尔'
+UNION ALL
+SELECT m.id, a.id
+FROM tb_movie m
+JOIN tb_actor a
+WHERE m.movie_name = '冰雪奇缘' AND a.actor_name = '伊迪娜·门泽尔'
+-- 蜘蛛侠：英雄远征
+UNION ALL
+SELECT m.id, a.id
+FROM tb_movie m
+JOIN tb_actor a
+WHERE m.movie_name = '蜘蛛侠：英雄远征' AND a.actor_name = '汤姆·赫兰德'
+UNION ALL
+SELECT m.id, a.id
+FROM tb_movie m
+JOIN tb_actor a
+WHERE m.movie_name = '蜘蛛侠：英雄远征' AND a.actor_name = '赞达亚'
+-- 哪吒之魔童降世
+UNION ALL
+SELECT m.id, a.id
+FROM tb_movie m
+JOIN tb_actor a
+WHERE m.movie_name = '哪吒之魔童降世' AND a.actor_name = '吕艳婷'
+UNION ALL
+SELECT m.id, a.id
+FROM tb_movie m
+JOIN tb_actor a
+WHERE m.movie_name = '哪吒之魔童降世' AND a.actor_name = '囧森瑟夫'
+-- 我不是药神
+UNION ALL
+SELECT m.id, a.id
+FROM tb_movie m
+JOIN tb_actor a
+WHERE m.movie_name = '我不是药神' AND a.actor_name = '徐峥'
+UNION ALL
+SELECT m.id, a.id
+FROM tb_movie m
+JOIN tb_actor a
+WHERE m.movie_name = '我不是药神' AND a.actor_name = '王传君'
+-- 海王
+UNION ALL
+SELECT m.id, a.id
+FROM tb_movie m
+JOIN tb_actor a
+WHERE m.movie_name = '海王' AND a.actor_name = '杰森·莫玛'
+UNION ALL
+SELECT m.id, a.id
+FROM tb_movie m
+JOIN tb_actor a
+WHERE m.movie_name = '海王' AND a.actor_name = '艾梅柏·希尔德'
+-- 飞驰人生
+UNION ALL
+SELECT m.id, a.id
+FROM tb_movie m
+JOIN tb_actor a
+WHERE m.movie_name = '飞驰人生' AND a.actor_name = '沈腾'
+UNION ALL
+SELECT m.id, a.id
+FROM tb_movie m
+JOIN tb_actor a
+WHERE m.movie_name = '飞驰人生' AND a.actor_name = '黄景瑜'
+-- 绿皮书
+UNION ALL
+SELECT m.id, a.id
+FROM tb_movie m
+JOIN tb_actor a
+WHERE m.movie_name = '绿皮书' AND a.actor_name = '维果·莫腾森'
+UNION ALL
+SELECT m.id, a.id
+FROM tb_movie m
+JOIN tb_actor a
+WHERE m.movie_name = '绿皮书' AND a.actor_name = '马赫沙拉·阿里'
+-- 少年的你
+UNION ALL
+SELECT m.id, a.id
+FROM tb_movie m
+JOIN tb_actor a
+WHERE m.movie_name = '少年的你' AND a.actor_name = '周冬雨'
+UNION ALL
+SELECT m.id, a.id
+FROM tb_movie m
+JOIN tb_actor a
+WHERE m.movie_name = '少年的你' AND a.actor_name = '易烊千玺'
+-- 流浪地球
+UNION ALL
+SELECT m.id, a.id
+FROM tb_movie m
+JOIN tb_actor a
+WHERE m.movie_name = '流浪地球' AND a.actor_name = '吴京'
+UNION ALL
+SELECT m.id, a.id
+FROM tb_movie m
+JOIN tb_actor a
+WHERE m.movie_name = '流浪地球' AND a.actor_name = '屈楚萧'
+-- 白蛇：缘起
+UNION ALL
+SELECT m.id, a.id
+FROM tb_movie m
+JOIN tb_actor a
+WHERE m.movie_name = '白蛇：缘起' AND a.actor_name = '张喆'
+UNION ALL
+SELECT m.id, a.id
+FROM tb_movie m
+JOIN tb_actor a
+WHERE m.movie_name = '白蛇：缘起' AND a.actor_name = '杨天翔'
+-- 姜子牙
+UNION ALL
+SELECT m.id, a.id
+FROM tb_movie m
+JOIN tb_actor a
+WHERE m.movie_name = '姜子牙' AND a.actor_name = '郑希'
+UNION ALL
+SELECT m.id, a.id
+FROM tb_movie m
+JOIN tb_actor a
+WHERE m.movie_name = '姜子牙' AND a.actor_name = '季冠霖'
+-- 误杀2
+UNION ALL
+SELECT m.id, a.id
+FROM tb_movie m
+JOIN tb_actor a
+WHERE m.movie_name = '误杀2' AND a.actor_name = '肖央'
+UNION ALL
+SELECT m.id, a.id
+FROM tb_movie m
+JOIN tb_actor a
+WHERE m.movie_name = '误杀2' AND a.actor_name = '任达华'
+-- 速度与激情9
+UNION ALL
+SELECT m.id, a.id
+FROM tb_movie m
+JOIN tb_actor a
+WHERE m.movie_name = '速度与激情9' AND a.actor_name = '范·迪塞尔'
+UNION ALL
+SELECT m.id, a.id
+FROM tb_movie m
+JOIN tb_actor a
+WHERE m.movie_name = '速度与激情9' AND a.actor_name = '约翰·塞纳'
+-- 哥斯拉大战金刚
+UNION ALL
+SELECT m.id, a.id
+FROM tb_movie m
+JOIN tb_actor a
+WHERE m.movie_name = '哥斯拉大战金刚' AND a.actor_name = '亚历山大·斯卡斯加德'
+UNION ALL
+SELECT m.id, a.id
+FROM tb_movie m
+JOIN tb_actor a
+WHERE m.movie_name = '哥斯拉大战金刚' AND a.actor_name = '米莉·博比·布朗'
+-- 人潮汹涌
+UNION ALL
+SELECT m.id, a.id
+FROM tb_movie m
+JOIN tb_actor a
+WHERE m.movie_name = '人潮汹涌' AND a.actor_name = '刘德华'
+UNION ALL
+SELECT m.id, a.id
+FROM tb_movie m
+JOIN tb_actor a
+WHERE m.movie_name = '人潮汹涌' AND a.actor_name = '肖央'
+-- 刺杀小说家
+UNION ALL
+SELECT m.id, a.id
+FROM tb_movie m
+JOIN tb_actor a
+WHERE m.movie_name = '刺杀小说家' AND a.actor_name = '雷佳音'
+UNION ALL
+SELECT m.id, a.id
+FROM tb_movie m
+JOIN tb_actor a
+WHERE m.movie_name = '刺杀小说家' AND a.actor_name = '杨幂'
+-- 新神榜：哪吒重生
+UNION ALL
+SELECT m.id, a.id
+FROM tb_movie m
+JOIN tb_actor a
+WHERE m.movie_name = '新神榜：哪吒重生' AND a.actor_name = '杨天翔'
+UNION ALL
+SELECT m.id, a.id
+FROM tb_movie m
+JOIN tb_actor a
+WHERE m.movie_name = '新神榜：哪吒重生' AND a.actor_name = '张赫'
+-- 猫和老鼠：真人版
+UNION ALL
+SELECT m.id, a.id
+FROM tb_movie m
+JOIN tb_actor a
+WHERE m.movie_name = '猫和老鼠：真人版' AND a.actor_name = '科洛·莫瑞兹'
+UNION ALL
+SELECT m.id, a.id
+FROM tb_movie m
+JOIN tb_actor a
+WHERE m.movie_name = '猫和老鼠：真人版' AND a.actor_name = '迈克尔·佩纳'
+-- 拆弹专家2
+UNION ALL
+SELECT m.id, a.id
+FROM tb_movie m
+JOIN tb_actor a
+WHERE m.movie_name = '拆弹专家2' AND a.actor_name = '刘德华'
+UNION ALL
+SELECT m.id, a.id
+FROM tb_movie m
+JOIN tb_actor a
+WHERE m.movie_name = '拆弹专家2' AND a.actor_name = '刘青云'
+-- 你好世界
+UNION ALL
+SELECT m.id, a.id
+FROM tb_movie m
+JOIN tb_actor a
+WHERE m.movie_name = '你好世界' AND a.actor_name = '北村匠海'
+UNION ALL
+SELECT m.id, a.id
+FROM tb_movie m
+JOIN tb_actor a
+WHERE m.movie_name = '你好世界' AND a.actor_name = '松坂桃李'
+-- 悬崖之上
+UNION ALL
+SELECT m.id, a.id
+FROM tb_movie m
+JOIN tb_actor a
+WHERE m.movie_name = '悬崖之上' AND a.actor_name = '张译'
+UNION ALL
+SELECT m.id, a.id
+FROM tb_movie m
+JOIN tb_actor a
+WHERE m.movie_name = '悬崖之上' AND a.actor_name = '于和伟'
+-- 扫黑·决战
+UNION ALL
+SELECT m.id, a.id
+FROM tb_movie m
+JOIN tb_actor a
+WHERE m.movie_name = '扫黑·决战' AND a.actor_name = '姜武'
+UNION ALL
+SELECT m.id, a.id
+FROM tb_movie m
+JOIN tb_actor a
+WHERE m.movie_name = '扫黑·决战' AND a.actor_name = '张颂文'
+-- 秘密访客
+UNION ALL
+SELECT m.id, a.id
+FROM tb_movie m
+JOIN tb_actor a
+WHERE m.movie_name = '秘密访客' AND a.actor_name = '郭富城'
+UNION ALL
+SELECT m.id, a.id
+FROM tb_movie m
+JOIN tb_actor a
+WHERE m.movie_name = '秘密访客' AND a.actor_name = '段奕宏'
+-- 阳光劫匪
+UNION ALL
+SELECT m.id, a.id
+FROM tb_movie m
+JOIN tb_actor a
+WHERE m.movie_name = '阳光劫匪' AND a.actor_name = '马丽'
+UNION ALL
+SELECT m.id, a.id
+FROM tb_movie m
+JOIN tb_actor a
+WHERE m.movie_name = '阳光劫匪' AND a.actor_name = '宋佳'
+-- 追虎擒龙
+UNION ALL
+SELECT m.id, a.id
+FROM tb_movie m
+JOIN tb_actor a
+WHERE m.movie_name = '追虎擒龙' AND a.actor_name = '古天乐'
+UNION ALL
+SELECT m.id, a.id
+FROM tb_movie m
+JOIN tb_actor a
+WHERE m.movie_name = '追虎擒龙' AND a.actor_name = '梁家辉'
+-- 真·三国无双
+UNION ALL
+SELECT m.id, a.id
+FROM tb_movie m
+JOIN tb_actor a
+WHERE m.movie_name = '真·三国无双' AND a.actor_name = '王凯'
+UNION ALL
+SELECT m.id, a.id
+FROM tb_movie m
+JOIN tb_actor a
+WHERE m.movie_name = '真·三国无双' AND a.actor_name = '古力娜扎'
+-- 世间有她
+UNION ALL
+SELECT m.id, a.id
+FROM tb_movie m
+JOIN tb_actor a
+WHERE m.movie_name = '世间有她' AND a.actor_name = '周迅'
+UNION ALL
+SELECT m.id, a.id
+FROM tb_movie m
+JOIN tb_actor a
+WHERE m.movie_name = '世间有她' AND a.actor_name = '易烊千玺'
+-- 峰爆
+UNION ALL
+SELECT m.id, a.id
+FROM tb_movie m
+JOIN tb_actor a
+WHERE m.movie_name = '峰爆' AND a.actor_name = '朱一龙'
+UNION ALL
+SELECT m.id, a.id
+FROM tb_movie m
+JOIN tb_actor a
+WHERE m.movie_name = '峰爆' AND a.actor_name = '黄志忠'
+-- 关于我妈的一切
+UNION ALL
+SELECT m.id, a.id
+FROM tb_movie m
+JOIN tb_actor a
+WHERE m.movie_name = '关于我妈的一切' AND a.actor_name = '徐帆'
+UNION ALL
+SELECT m.id, a.id
+FROM tb_movie m
+JOIN tb_actor a
+WHERE m.movie_name = '关于我妈的一切' AND a.actor_name = '张婧仪';
+
+-- 插入电影 - 导演关联数据
+INSERT INTO tb_movie_director (movie_id, director_id)
+SELECT m.id, d.id
+FROM tb_movie m
+JOIN tb_director d
+WHERE m.movie_name = '复仇者联盟4：终局之战' AND d.director_name = '安东尼·罗素'
+UNION ALL
+SELECT m.id, d.id
+FROM tb_movie m
+JOIN tb_director d
+WHERE m.movie_name = '复仇者联盟4：终局之战' AND d.director_name = '乔·罗素'
+-- 唐人街探案3
+UNION ALL
+SELECT m.id, d.id
+FROM tb_movie m
+JOIN tb_director d
+WHERE m.movie_name = '唐人街探案3' AND d.director_name = '陈思诚'
+-- 你好，李焕英
+UNION ALL
+SELECT m.id, d.id
+FROM tb_movie m
+JOIN tb_director d
+WHERE m.movie_name = '你好，李焕英' AND d.director_name = '贾玲'
+-- 肖申克的救赎
+UNION ALL
+SELECT m.id, d.id
+FROM tb_movie m
+JOIN tb_director d
+WHERE m.movie_name = '肖申克的救赎' AND d.director_name = '弗兰克·德拉邦特'
+-- 泰坦尼克号
+UNION ALL
+SELECT m.id, d.id
+FROM tb_movie m
+JOIN tb_director d
+WHERE m.movie_name = '泰坦尼克号' AND d.director_name = '詹姆斯·卡梅隆'
+-- 疯狂动物城
+UNION ALL
+SELECT m.id, d.id
+FROM tb_movie m
+JOIN tb_director d
+WHERE m.movie_name = '疯狂动物城' AND d.director_name = '拜伦·霍华德'
+UNION ALL
+SELECT m.id, d.id
+FROM tb_movie m
+JOIN tb_director d
+WHERE m.movie_name = '疯狂动物城' AND d.director_name = '里奇·摩尔'
+-- 星际穿越
+UNION ALL
+SELECT m.id, d.id
+FROM tb_movie m
+JOIN tb_director d
+WHERE m.movie_name = '星际穿越' AND d.director_name = '克里斯托弗·诺兰'
+-- 哈利·波特与魔法石
+UNION ALL
+SELECT m.id, d.id
+FROM tb_movie m
+JOIN tb_director d
+WHERE m.movie_name = '哈利·波特与魔法石' AND d.director_name = '克里斯·哥伦布'
+-- 寻梦环游记
+UNION ALL
+SELECT m.id, d.id
+FROM tb_movie m
+JOIN tb_director d
+WHERE m.movie_name = '寻梦环游记' AND d.director_name = '李·昂克里奇'
+UNION ALL
+SELECT m.id, d.id
+FROM tb_movie m
+JOIN tb_director d
+WHERE m.movie_name = '寻梦环游记' AND d.director_name = '阿德里安·莫利纳'
+-- 寄生虫
+UNION ALL
+SELECT m.id, d.id
+FROM tb_movie m
+JOIN tb_director d
+WHERE m.movie_name = '寄生虫' AND d.director_name = '奉俊昊'
+-- 毒液：致命守护者
+UNION ALL
+SELECT m.id, d.id
+FROM tb_movie m
+JOIN tb_director d
+WHERE m.movie_name = '毒液：致命守护者' AND d.director_name = '鲁本·弗雷斯彻'
+-- 疯狂原始人
+UNION ALL
+SELECT m.id, d.id
+FROM tb_movie m
+JOIN tb_director d
+WHERE m.movie_name = '疯狂原始人' AND d.director_name = '柯克·德·米科'
+UNION ALL
+SELECT m.id, d.id
+FROM tb_movie m
+JOIN tb_director d
+WHERE m.movie_name = '疯狂原始人' AND d.director_name = '克里斯·桑德斯'
+-- 误杀
+UNION ALL
+SELECT m.id, d.id
+FROM tb_movie m
+JOIN tb_director d
+WHERE m.movie_name = '误杀' AND d.director_name = '柯汶利'
+-- 冰雪奇缘
+UNION ALL
+SELECT m.id, d.id
+FROM tb_movie m
+JOIN tb_director d
+WHERE m.movie_name = '冰雪奇缘' AND d.director_name = '克里斯·巴克'
+UNION ALL
+SELECT m.id, d.id
+FROM tb_movie m
+JOIN tb_director d
+WHERE m.movie_name = '冰雪奇缘' AND d.director_name = '珍妮弗·李'
+-- 蜘蛛侠：英雄远征
+UNION ALL
+SELECT m.id, d.id
+FROM tb_movie m
+JOIN tb_director d
+WHERE m.movie_name = '蜘蛛侠：英雄远征' AND d.director_name = '乔·沃茨'
+-- 哪吒之魔童降世
+UNION ALL
+SELECT m.id, d.id
+FROM tb_movie m
+JOIN tb_director d
+WHERE m.movie_name = '哪吒之魔童降世' AND d.director_name = '饺子'
+-- 我不是药神
+UNION ALL
+SELECT m.id, d.id
+FROM tb_movie m
+JOIN tb_director d
+WHERE m.movie_name = '我不是药神' AND d.director_name = '文牧野'
+-- 海王
+UNION ALL
+SELECT m.id, d.id
+FROM tb_movie m
+JOIN tb_director d
+WHERE m.movie_name = '海王' AND d.director_name = '温子仁'
+-- 飞驰人生
+UNION ALL
+SELECT m.id, d.id
+FROM tb_movie m
+JOIN tb_director d
+WHERE m.movie_name = '飞驰人生' AND d.director_name = '韩寒'
+-- 绿皮书
+UNION ALL
+SELECT m.id, d.id
+FROM tb_movie m
+JOIN tb_director d
+WHERE m.movie_name = '绿皮书' AND d.director_name = '彼得·法雷里'
+-- 少年的你
+UNION ALL
+SELECT m.id, d.id
+FROM tb_movie m
+JOIN tb_director d
+WHERE m.movie_name = '少年的你' AND d.director_name = '曾国祥'
+-- 流浪地球
+UNION ALL
+SELECT m.id, d.id
+FROM tb_movie m
+JOIN tb_director d
+WHERE m.movie_name = '流浪地球' AND d.director_name = '郭帆'
+UNION ALL
+SELECT m.id, d.id
+FROM tb_movie m
+JOIN tb_director d
+WHERE m.movie_name = '流浪地球' AND d.director_name = '吴京'  -- 吴京也参与了部分导演工作
+-- 白蛇：缘起
+UNION ALL
+SELECT m.id, d.id
+FROM tb_movie m
+JOIN tb_director d
+WHERE m.movie_name = '白蛇：缘起' AND d.director_name = '黄家康'
+UNION ALL
+SELECT m.id, d.id
+FROM tb_movie m
+JOIN tb_director d
+WHERE m.movie_name = '白蛇：缘起' AND d.director_name = '赵霁'
+-- 姜子牙
+UNION ALL
+SELECT m.id, d.id
+FROM tb_movie m
+JOIN tb_director d
+WHERE m.movie_name = '姜子牙' AND d.director_name = '程腾'
+UNION ALL
+SELECT m.id, d.id
+FROM tb_movie m
+JOIN tb_director d
+WHERE m.movie_name = '姜子牙' AND d.director_name = '李炜'
+-- 误杀2
+UNION ALL
+SELECT m.id, d.id
+FROM tb_movie m
+JOIN tb_director d
+WHERE m.movie_name = '误杀2' AND d.director_name = '戴墨'
+-- 速度与激情9
+UNION ALL
+SELECT m.id, d.id
+FROM tb_movie m
+JOIN tb_director d
+WHERE m.movie_name = '速度与激情9' AND d.director_name = '林诣彬'
+-- 哥斯拉大战金刚
+UNION ALL
+SELECT m.id, d.id
+FROM tb_movie m
+JOIN tb_director d
+WHERE m.movie_name = '哥斯拉大战金刚' AND d.director_name = '亚当·温加德'
+-- 人潮汹涌
+UNION ALL
+SELECT m.id, d.id
+FROM tb_movie m
+JOIN tb_director d
+WHERE m.movie_name = '人潮汹涌' AND d.director_name = '饶晓志'
+-- 刺杀小说家
+UNION ALL
+SELECT m.id, d.id
+FROM tb_movie m
+JOIN tb_director d
+WHERE m.movie_name = '刺杀小说家' AND d.director_name = '路阳'
+-- 新神榜：哪吒重生
+UNION ALL
+SELECT m.id, d.id
+FROM tb_movie m
+JOIN tb_director d
+WHERE m.movie_name = '新神榜：哪吒重生' AND d.director_name = '赵霁'
+-- 猫和老鼠：真人版
+UNION ALL
+SELECT m.id, d.id
+FROM tb_movie m
+JOIN tb_director d
+WHERE m.movie_name = '猫和老鼠：真人版' AND d.director_name = '蒂姆·斯托瑞'
+-- 拆弹专家2
+UNION ALL
+SELECT m.id, d.id
+FROM tb_movie m
+JOIN tb_director d
+WHERE m.movie_name = '拆弹专家2' AND d.director_name = '邱礼涛'
+-- 你好世界
+UNION ALL
+SELECT m.id, d.id
+FROM tb_movie m
+JOIN tb_director d
+WHERE m.movie_name = '你好世界' AND d.director_name = '伊藤智彦'
+-- 悬崖之上
+UNION ALL
+SELECT m.id, d.id
+FROM tb_movie m
+JOIN tb_director d
+WHERE m.movie_name = '悬崖之上' AND d.director_name = '张艺谋'
+-- 扫黑·决战
+UNION ALL
+SELECT m.id, d.id
+FROM tb_movie m
+JOIN tb_director d
+WHERE m.movie_name = '扫黑·决战' AND d.director_name = '吕聿来'
+-- 秘密访客
+UNION ALL
+SELECT m.id, d.id
+FROM tb_movie m
+JOIN tb_director d
+WHERE m.movie_name = '秘密访客' AND d.director_name = '陈正道'
+-- 阳光劫匪
+UNION ALL
+SELECT m.id, d.id
+FROM tb_movie m
+JOIN tb_director d
+WHERE m.movie_name = '阳光劫匪' AND d.director_name = '李玉'
+-- 追虎擒龙
+UNION ALL
+SELECT m.id, d.id
+FROM tb_movie m
+JOIN tb_director d
+WHERE m.movie_name = '追虎擒龙' AND d.director_name = '王晶'
+UNION ALL
+SELECT m.id, d.id
+FROM tb_movie m
+JOIN tb_director d
+WHERE m.movie_name = '追虎擒龙' AND d.director_name = '许悦铭'
+-- 真·三国无双
+UNION ALL
+SELECT m.id, d.id
+FROM tb_movie m
+JOIN tb_director d
+WHERE m.movie_name = '真·三国无双' AND d.director_name = '周显扬'
+-- 世间有她
+UNION ALL
+SELECT m.id, d.id
+FROM tb_movie m
+JOIN tb_director d
+WHERE m.movie_name = '世间有她' AND d.director_name = '张艾嘉'
+UNION ALL
+SELECT m.id, d.id
+FROM tb_movie m
+JOIN tb_director d
+WHERE m.movie_name = '世间有她' AND d.director_name = '李少红'
+UNION ALL
+SELECT m.id, d.id
+FROM tb_movie m
+JOIN tb_director d
+WHERE m.movie_name = '世间有她' AND d.director_name = '陈冲'
+-- 峰爆
+UNION ALL
+SELECT m.id, d.id
+FROM tb_movie m
+JOIN tb_director d
+WHERE m.movie_name = '峰爆' AND d.director_name = '李骏'
+-- 关于我妈的一切
+UNION ALL
+SELECT m.id, d.id
+FROM tb_movie m
+JOIN tb_director d
+WHERE m.movie_name = '关于我妈的一切' AND d.director_name = '赵天宇'
+-- 长津湖
+UNION ALL
+SELECT m.id, d.id
+FROM tb_movie m
+JOIN tb_director d
+WHERE m.movie_name = '长津湖' AND d.director_name = '陈凯歌'
+UNION ALL
+SELECT m.id, d.id
+FROM tb_movie m
+JOIN tb_director d
+WHERE m.movie_name = '长津湖' AND d.director_name = '徐克'
+UNION ALL
+SELECT m.id, d.id
+FROM tb_movie m
+JOIN tb_director d
+WHERE m.movie_name = '长津湖' AND d.director_name = '林超贤'
+UNION ALL
+SELECT m.id, d.id
+FROM tb_movie m
+JOIN tb_director d
+WHERE m.movie_name = '长津湖' AND d.director_name = '吴京'
+-- 我和我的父辈
+UNION ALL
+SELECT m.id, d.id
+FROM tb_movie m
+JOIN tb_director d
+WHERE m.movie_name = '我和我的父辈' AND d.director_name = '吴京'
+UNION ALL
+SELECT m.id, d.id
+FROM tb_movie m
+JOIN tb_director d
+WHERE m.movie_name = '我和我的父辈' AND d.director_name = '章子怡'
+UNION ALL
+SELECT m.id, d.id
+FROM tb_movie m
+JOIN tb_director d
+WHERE m.movie_name = '我和我的父辈' AND d.director_name = '徐峥'
+UNION ALL
+SELECT m.id, d.id
+FROM tb_movie m
+JOIN tb_director d
+WHERE m.movie_name = '我和我的父辈' AND d.director_name = '沈腾'
+-- 铁道英雄
+UNION ALL
+SELECT m.id, d.id
+FROM tb_movie m
+JOIN tb_director d
+WHERE m.movie_name = '铁道英雄' AND d.director_name = '杨枫'
+-- 门锁
+UNION ALL
+SELECT m.id, d.id
+FROM tb_movie m
+JOIN tb_director d
+WHERE m.movie_name = '门锁' AND d.director_name = '别克';
